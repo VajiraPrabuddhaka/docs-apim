@@ -27,12 +27,12 @@ Follow the instructions below to use Kubernetes (K8s) and Helm resources for con
     - Add the WSO2 Helm chart repository.
         
           ```
-           helm repo add wso2 https://helm.wso2.com && helm repo update
+          helm repo add wso2 https://helm.wso2.com && helm repo update
           ```
 
 1.  Checkout the Helm Resources for WSO2 API Manager Git repository using `git clone` :
 
-    ```
+    ``` 
     git clone https://github.com/wso2/kubernetes-apim.git
     git checkout tags/v4.0.0.1
     ```
@@ -42,7 +42,7 @@ Follow the instructions below to use Kubernetes (K8s) and Helm resources for con
     !!! note
         The default product configurations for deployment of WSO2 API Manager are available [here](https://github.com/wso2/kubernetes-apim/tree/v4.0.0.1/simple/am-single/templates) folder. Change the configurations, as necessary.
 
-    Open the `<HELM_HOME>/am-single/values.yaml` file and provide the following values for WSO2 Subscription Configurations.
+    Open the `<HELM_HOME>/am-single/values.yaml` and provide the following values for WSO2 Subscription Configurations.
     
      
     | Parameter                                                                   | Description                                                                               | Default Value               |
@@ -58,6 +58,10 @@ Follow the instructions below to use Kubernetes (K8s) and Helm resources for con
     
     Setup the cloud Analytics solution and obtain an on-prem key. For more information, see [Register for Analytics](https://apim.docs.wso2.com/en/latest/observe/api-manager-analytics/configure-analytics/register-for-analytics/).
 
+    Refer [Register for Analytics](https://apim.docs.wso2.com/en/4.0.0/observe/api-manager-analytics/configure-analytics/register-for-analytics/) to setup the cloud Analytics solution and obtain an on-prem key.
+
+    ```
+    helm install --dependency-update --name <RELEASE_NAME> <HELM_HOME>/am-single --namespace <NAMESPACE> --set wso2.choreoAnalytics.enabled=true --set wso2.choreoAnalytics.endpoint=<CHOREO_ANALYTICS_ENDPOINT> --set wso2.choreoAnalytics.onpremKey=<ONPREM_KEY>
     ```
     helm install --dependency-update --name <RELEASE_NAME> <HELM_HOME>/am-single --namespace <NAMESPACE> --set wso2.choreoAnalytics.enabled=true --set wso2.choreoAnalytics.endpoint=<CHOREO_ANALYTICS_ENDPOINT> --set wso2.choreoAnalytics.onpremKey=<ONPREM_KEY>
     ```
@@ -71,6 +75,14 @@ Follow the instructions below to use Kubernetes (K8s) and Helm resources for con
     | `wso2.choreoAnalytics.onpremKey`                                                | On-prem key for Analytics                                                           | ""                          |
 
 
+    You can also provide the above configurations in the `<HELM_HOME>/am-single/values.yaml` file.
+
+    | Parameter                                                                   | Description                                                                               | Default Value               |
+    |-----------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|-----------------------------|
+    | `wso2.choreoAnalytics.enabled`                                                | Analytics enabled or not                                                           | false                          |
+    | `wso2.choreoAnalytics.endpoint`                                                | Analytics data publishing endpoint                                                           | https://analytics-event-auth.choreo.dev/auth/v1                          |
+    | `wso2.choreoAnalytics.onpremKey`                                                | On-prem key for Analytics                                                           | ""                          |
+
 4.  Access Management Console.
 
     1.  Obtain the external IP (`EXTERNAL-IP`) of the Ingress resources by listing down the Kubernetes Ingresses.
@@ -79,11 +91,11 @@ Follow the instructions below to use Kubernetes (K8s) and Helm resources for con
         kubectl get ing -n <NAMESPACE>
         ```
         Example:
-        ``` java
+        ```
         NAME                                               HOSTS                                ADDRESS          PORTS      AGE
-        wso2am-single-node-am-gateway-ingress               <RELEASE_NAME>-gateway                <EXTERNAL-IP>    80, 443    7m
-        wso2am-single-node-am-ingress                       <RELEASE_NAME>-am                     <EXTERNAL-IP>    80, 443    7m
-        wso2am-single-node-am-websub-ingress                <RELEASE_NAME>-websub                 <EXTERNAL-IP>    80, 443    7m
+        wso2am-single-node-am-gateway-ingress              <RELEASE_NAME>-gateway               <EXTERNAL-IP>    80, 443    7m
+        wso2am-single-node-am-ingress                      <RELEASE_NAME>-am                    <EXTERNAL-IP>    80, 443    7m
+        wso2am-single-node-am-websub-ingress               <RELEASE_NAME>-websub                <EXTERNAL-IP>    80, 443    7m
         ```
 
     2.  Add the above hosts as entries in `/etc/hosts` file as follows:
@@ -97,7 +109,7 @@ Follow the instructions below to use Kubernetes (K8s) and Helm resources for con
     3.  Try navigating to `https://<RELEASE_NAME>-am/carbon`, `https://<RELEASE_NAME>-am/publisher` and `https://<RELEASE_NAME>-am/devportal` from your favorite browser.
     
 !!! note
-    You can read the [README guide](https://github.com/wso2/kubernetes-apim/blob/v4.0.0.1/simple/am-single/README.md) of WSO2 API Manager Git repository for further details on other dependencies and configurations. 
+    You can read the [README guide](https://github.com/wso2/kubernetes-apim/blob/v4.0.0.1/simple/am-single/README.md) of WSO2 API Manager Git repository for further details on other dependencies and configurations.
 
 For more information, see the deployment configurations with regard to the [Advanced Deployment Patterns]({{base_path}}/install-and-setup/setup/deployment-overview/).
 
